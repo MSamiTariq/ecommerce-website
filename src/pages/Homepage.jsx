@@ -208,37 +208,34 @@ export default function Homepage() {
                 <div className="flex h-16 items-center justify-between">
                   {/* Logo (lg+) */}
                   <div className="hidden lg:flex lg:items-center">
-                    <a href="#">
+                    <span>
                       <span className="sr-only">Your Company</span>
                       <img
                         alt=""
                         src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
                         className="h-8 w-auto"
                       />
-                    </a>
+                    </span>
                   </div>
 
                   {/* Logo (lg-) */}
-                  <a href="#" className="lg:hidden">
+                  <span className="lg:hidden">
                     <span className="sr-only">Your Company</span>
                     <img
                       alt=""
                       src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
                       className="h-8 w-auto"
                     />
-                  </a>
+                  </span>
 
                   <div className="flex flex-1 items-center justify-end">
                     <div className="flex items-center lg:ml-8">
                       <div className="flex space-x-8">
                         <div className="flex">
-                          <a
-                            href="#"
-                            className="-m-2 p-2 text-gray-400 hover:text-gray-500"
-                          >
+                          <span className="-m-2 p-2 text-gray-400 hover:text-gray-500">
                             <span className="sr-only">Account</span>
                             <UserIcon aria-hidden="true" className="size-6" />
-                          </a>
+                          </span>
                         </div>
                       </div>
 
@@ -248,10 +245,7 @@ export default function Homepage() {
                       />
 
                       <div className="flow-root">
-                        <a
-                          href="#"
-                          className="group -m-2 flex items-center p-2"
-                        >
+                        <span className="group -m-2 flex items-center p-2">
                           <ShoppingCartIcon
                             aria-hidden="true"
                             className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
@@ -262,7 +256,7 @@ export default function Homepage() {
                           <span className="sr-only">
                             items in cart, view bag
                           </span>
-                        </a>
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -278,10 +272,7 @@ export default function Homepage() {
         <div className="flex flex-col border-b border-gray-200 lg:border-0">
           <nav aria-label="Offers" className="order-last lg:order-first">
             <div className="mx-auto max-w-7xl lg:px-8">
-              <ul
-                role="list"
-                className="grid grid-cols-1 divide-y divide-gray-200 lg:grid-cols-3 lg:divide-x lg:divide-y-0"
-              >
+              <ul className="grid grid-cols-1 divide-y divide-gray-200 lg:grid-cols-3 lg:divide-x lg:divide-y-0">
                 {offers.map((offer) => (
                   <li key={offer.name} className="flex flex-col">
                     <a
@@ -316,12 +307,9 @@ export default function Homepage() {
                       world can't beat checking off some items on a paper card.
                     </p>
                     <div className="mt-6">
-                      <a
-                        href="#"
-                        className="inline-block rounded-md border border-transparent bg-indigo-600 px-8 py-3 font-medium text-white hover:bg-indigo-700"
-                      >
+                      <span className="inline-block rounded-md border border-transparent bg-indigo-600 px-8 py-3 font-medium text-white hover:bg-indigo-700">
                         Shop Productivity
-                      </a>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -379,7 +367,7 @@ export default function Homepage() {
                       </div>
                       {open && (
                         <ItemModal
-                        key={product.id}
+                          key={product.id}
                           open={open}
                           setOpen={setOpen}
                           item={product}

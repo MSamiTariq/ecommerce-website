@@ -141,12 +141,9 @@ export default function ItemModal({ open, setOpen, item }) {
                           <div className="text-sm font-medium text-gray-900">
                             Size
                           </div>
-                          <a
-                            href="#"
-                            className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
-                          >
+                          <span className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
                             Size guide
-                          </a>
+                          </span>
                         </div>
 
                         <RadioGroup
