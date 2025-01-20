@@ -40,7 +40,7 @@ export default function ItemModal({ open, setOpen, item }) {
     }
   };
 
-  const phoneNumber = "923323327425";
+  const phoneNumber = "923452102501";
   const message = `Hello there! I'm interested in your product. I would like to order ${quantity} units of ${item.name} in size ${selectedSize.name}.`; // Replace with your message
   const handleClick = () => {
     const encodedMessage = encodeURIComponent(message); // Encode the message
@@ -141,7 +141,7 @@ export default function ItemModal({ open, setOpen, item }) {
                           <div className="text-sm font-medium text-gray-900">
                             Size
                           </div>
-                          <span className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                          <span className="text-sm font-medium text-[#c68b2f] hover:text-indigo-500">
                             Size guide
                           </span>
                         </div>
@@ -160,7 +160,7 @@ export default function ItemModal({ open, setOpen, item }) {
                                 size.inStock
                                   ? "cursor-pointer focus:outline-none"
                                   : "cursor-not-allowed opacity-25",
-                                "flex items-center justify-center rounded-md border border-gray-200 bg-white px-3 py-3 text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 data-[checked]:border-transparent data-[checked]:bg-indigo-600 data-[checked]:text-white data-[focus]:ring-2 data-[focus]:ring-indigo-500 data-[focus]:ring-offset-2 data-[checked]:hover:bg-indigo-700 sm:flex-1"
+                                "flex items-center justify-center rounded-md border border-gray-200 bg-white px-3 py-3 text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 data-[checked]:border-transparent data-[checked]:bg-[#c68b2f] data-[checked]:text-white data-[focus]:ring-2 data-[focus]:ring-[#c68b2f] data-[focus]:ring-offset-2 data-[checked]:hover:bg-[#c68b2f] sm:flex-1"
                               )}
                             >
                               {size.name}
@@ -242,9 +242,9 @@ export default function ItemModal({ open, setOpen, item }) {
 
                       <button
                         type="submit"
-                        className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-[#c68b2f] px-8 py-3 text-base font-medium text-white hover:bg-[#c68b2f] focus:outline-none focus:ring-2 focus:ring-[#c68b2f] focus:ring-offset-2"
                       >
-                        Add to bag
+                        Buy Now
                       </button>
                     </form>
                   </section>

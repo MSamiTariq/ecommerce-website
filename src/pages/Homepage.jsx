@@ -6,33 +6,34 @@ import ItemModal from "../components/ItemModal";
 
 const offers = [
   {
-    name: "Download the app",
-    description: "Get an exclusive $5 off code",
+    name: "Order Fresh Flour Online",
+    description: "Get free delivery on orders above Rs. 2,000!",
     href: "#",
   },
   {
-    name: "Return when you're ready",
-    description: "60 days of free returns",
+    name: "Satisfaction Guaranteed",
+    description:
+      "Return your order within 7 days if you're not happy, no questions asked.",
     href: "#",
   },
   {
-    name: "Sign up for our newsletter",
-    description: "15% off your first order",
+    name: "Sign Up for Updates",
+    description:
+      "Subscribe to our newsletter and get Rs. 500 off your first order.",
     href: "#",
   },
 ];
 const trendingProducts = [
   {
     id: 1,
-    name: "Machined Pen",
-    color: "Black",
-    price: "$35",
+    name: "Multi-Grain Flour",
+    weight: "1 kg",
+    price: "Rs. 100",
     href: "#",
     rating: 3.9,
-    imageSrc:
-      "https://tailwindui.com/plus/img/ecommerce-images/home-page-02-product-01.jpg",
+    imageSrc: "/assets/images/multiGrainFlour.png",
     imageAlt:
-      "Black machined steel pen with hexagonal grip and small white logo at top.",
+      "Multi-grain flour in a clear plastic bag with a white label and a black plastic closure.",
     sizes: [
       { name: "XXS", inStock: true },
       { name: "XS", inStock: true },
@@ -45,15 +46,14 @@ const trendingProducts = [
   },
   {
     id: 1,
-    name: "Machined Pen",
-    color: "Black",
-    price: "$35",
+    name: "Multi-Grain Flour",
+    weight: "2 kg",
+    price: "Rs. 200",
     href: "#",
     rating: 3.9,
-    imageSrc:
-      "https://tailwindui.com/plus/img/ecommerce-images/home-page-02-product-01.jpg",
+    imageSrc: "/assets/images/multiGrainFlour.png",
     imageAlt:
-      "Black machined steel pen with hexagonal grip and small white logo at top.",
+      "Multi-grain flour in a clear plastic bag with a white label and a black plastic closure.",
     sizes: [
       { name: "XXS", inStock: true },
       { name: "XS", inStock: true },
@@ -66,15 +66,14 @@ const trendingProducts = [
   },
   {
     id: 1,
-    name: "Machined Pen",
-    color: "Black",
-    price: "$35",
+    name: "Multi-Grain Flour",
+    weight: "5 kg",
+    price: "Rs. 300",
     href: "#",
     rating: 3.9,
-    imageSrc:
-      "https://tailwindui.com/plus/img/ecommerce-images/home-page-02-product-01.jpg",
+    imageSrc: "/assets/images/multiGrainFlour.png",
     imageAlt:
-      "Black machined steel pen with hexagonal grip and small white logo at top.",
+      "Multi-grain flour in a clear plastic bag with a white label and a black plastic closure.",
     sizes: [
       { name: "XXS", inStock: true },
       { name: "XS", inStock: true },
@@ -87,15 +86,14 @@ const trendingProducts = [
   },
   {
     id: 1,
-    name: "Machined Pen",
-    color: "Black",
-    price: "$35",
+    name: "Multi-Grain Flour",
+    weight: "10 kg",
+    price: "Rs. 400",
     href: "#",
     rating: 3.9,
-    imageSrc:
-      "https://tailwindui.com/plus/img/ecommerce-images/home-page-02-product-01.jpg",
+    imageSrc: "/assets/images/multiGrainFlour.png",
     imageAlt:
-      "Black machined steel pen with hexagonal grip and small white logo at top.",
+      "Multi-grain flour in a clear plastic bag with a white label and a black plastic closure.",
     sizes: [
       { name: "XXS", inStock: true },
       { name: "XS", inStock: true },
@@ -108,15 +106,14 @@ const trendingProducts = [
   },
   {
     id: 1,
-    name: "Machined Pen",
-    color: "Black",
-    price: "$35",
+    name: "Multi-Grain Flour",
+    weight: "20 kg",
+    price: "Rs. 500",
     href: "#",
     rating: 3.9,
-    imageSrc:
-      "https://tailwindui.com/plus/img/ecommerce-images/home-page-02-product-01.jpg",
+    imageSrc: "/assets/images/multiGrainFlour.png",
     imageAlt:
-      "Black machined steel pen with hexagonal grip and small white logo at top.",
+      "Multi-grain flour in a clear plastic bag with a white label and a black plastic closure.",
     sizes: [
       { name: "XXS", inStock: true },
       { name: "XS", inStock: true },
@@ -132,20 +129,20 @@ const testimonials = [
   {
     id: 1,
     quote:
-      "My order arrived super quickly. The product is even better than I hoped it would be. Very happy customer over here!",
-    attribution: "Sarah Peters, New Orleans",
+      "The flour quality is exceptional, and it has made a noticeable difference in my baking. Highly recommend!",
+    attribution: "Ayesha Khan, Karachi",
   },
   {
     id: 2,
     quote:
-      "I had to return a purchase that didn’t fit. The whole process was so simple that I ended up ordering two new items!",
-    attribution: "Kelly McPherson, Chicago",
+      "I love the variety of grains available. The freshness and taste are unmatched. Will definitely order again!",
+    attribution: "Ahmed Ali, Lahore",
   },
   {
     id: 3,
     quote:
-      "Now that I’m on holiday for the summer, I’ll probably order a few more shirts. It’s just so convenient, and I know the quality will always be there.",
-    attribution: "Chris Paul, Phoenix",
+      "The customer service is fantastic, and the delivery was prompt. The flour is fresh and perfect for my needs.",
+    attribution: "Fatima Malik, Islamabad",
   },
 ];
 const footerNavigation = {
@@ -196,7 +193,7 @@ export default function Homepage() {
           <div className="bg-gray-900">
             <div className="mx-auto flex h-10 max-w-7xl items-center justify-center px-4 sm:px-6 lg:px-8">
               <p className="flex-1 text-center text-sm font-medium text-white lg:flex-none">
-                Get free delivery on orders over $100
+                Get free delivery on orders over Rs. 2,000
               </p>
             </div>
           </div>
@@ -212,8 +209,8 @@ export default function Homepage() {
                       <span className="sr-only">Your Company</span>
                       <img
                         alt=""
-                        src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-                        className="h-8 w-auto"
+                        src="/assets/images/khalislogo.jpg"
+                        className="h-16 w-auto"
                       />
                     </span>
                   </div>
@@ -223,8 +220,8 @@ export default function Homepage() {
                     <span className="sr-only">Your Company</span>
                     <img
                       alt=""
-                      src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-                      className="h-8 w-auto"
+                      src="/assets/images/khalislogo.jpg"
+                      className="h-12 w-auto"
                     />
                   </span>
 
@@ -268,7 +265,6 @@ export default function Homepage() {
       </header>
 
       <main>
-        {/* Hero */}
         <div className="flex flex-col border-b border-gray-200 lg:border-0">
           <nav aria-label="Offers" className="order-last lg:order-first">
             <div className="mx-auto max-w-7xl lg:px-8">
@@ -300,15 +296,17 @@ export default function Homepage() {
                 <div className="mx-auto max-w-2xl py-24 lg:max-w-none lg:py-64">
                   <div className="lg:pr-16">
                     <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl xl:text-6xl">
-                      Focus on what matters
+                      Fueling Happiness, Naturally — Choose Freshness, Choose
+                      Health
                     </h1>
                     <p className="mt-4 text-xl text-gray-600">
-                      All the charts, datepickers, and notifications in the
-                      world can't beat checking off some items on a paper card.
+                      Experience the richness of freshly milled grains tailored
+                      to your taste and needs. From top-quality wheat to your
+                      favorite blends, we grind it fresh for you!
                     </p>
                     <div className="mt-6">
-                      <span className="inline-block rounded-md border border-transparent bg-indigo-600 px-8 py-3 font-medium text-white hover:bg-indigo-700">
-                        Shop Productivity
+                      <span className="inline-block rounded-md border border-transparent bg-[#c68b2f] px-8 py-3 font-medium text-white hover:bg-[#a67524] cursor-pointer">
+                        Order Now
                       </span>
                     </div>
                   </div>
@@ -318,8 +316,13 @@ export default function Homepage() {
             <div className="h-48 w-full sm:h-64 lg:absolute lg:right-0 lg:top-0 lg:h-full lg:w-1/2">
               <img
                 alt=""
-                src="https://tailwindui.com/plus/img/ecommerce-images/home-page-02-hero-half-width.jpg"
-                className="size-full object-cover"
+                src="/assets/images/khalisLandingMobile.jpg"
+                className="size-full object-fill block lg:hidden"
+              />
+              <img
+                src="/assets/images/largeLandingPage.jpg"
+                alt="Large Landing Page"
+                className="hidden lg:block size-full"
               />
             </div>
           </div>
@@ -350,11 +353,11 @@ export default function Homepage() {
                         <img
                           alt={product.imageAlt}
                           src={product.imageSrc}
-                          className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75"
+                          className="aspect-square w-full rounded-md bg-gray-200 object-contain group-hover:opacity-75"
                         />
                         <div className="mt-6">
                           <p className="text-sm text-gray-500">
-                            {product.color}
+                            {product.weight}
                           </p>
                           <h3 className="mt-1 font-semibold text-gray-900">
                             <a href={product.href}>
@@ -388,8 +391,8 @@ export default function Homepage() {
             <div className="absolute inset-0 mx-auto max-w-7xl overflow-hidden xl:px-8">
               <img
                 alt=""
-                src="https://tailwindui.com/plus/img/ecommerce-images/home-page-02-sale-full-width.jpg"
-                className="size-full object-cover"
+                src="/assets/images/khalisCover.jpg"
+                className="object-cover"
               />
             </div>
             <div className="absolute inset-0 bg-white/75" />
@@ -447,21 +450,23 @@ export default function Homepage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="border-t border-gray-200">
             <div className="pb-20 pt-16">
-              <div className="md:flex md:justify-center">
+              <div className="flex justify-center">
                 <img
                   alt=""
-                  src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-                  className="h-8 w-auto"
+                  src="/assets/images/khalislogo.jpg"
+                  className="h-16 w-auto"
                 />
               </div>
-              <div>Footer items</div>
+              <div className="text-gray-500">
+                Order and Inquiry: 0345-210-2501
+              </div>
             </div>
           </div>
 
           <div className="py-10 md:flex md:items-center md:justify-between">
             <div className="text-center md:text-left">
               <p className="text-sm text-gray-500">
-                &copy; 2021 All Rights Reserved
+                &copy; 2025 All Rights Reserved
               </p>
             </div>
 
