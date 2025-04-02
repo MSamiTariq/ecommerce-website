@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router";
 import "./App.css";
 import "preline/preline";
+import { CartProvider } from "./contexts/CartContext";
 
 function App() {
   const location = useLocation();
@@ -10,9 +11,11 @@ function App() {
     window.HSStaticMethods.autoInit();
   }, [location.pathname]);
   return (
-    <div className="App">
-      <Homepage />
-    </div>
+    <CartProvider>
+      <div className="App">
+        <Homepage />
+      </div>
+    </CartProvider>
   );
 }
 

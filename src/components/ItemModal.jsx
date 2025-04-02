@@ -1,23 +1,43 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogBackdrop,
   DialogPanel,
   Radio,
   RadioGroup,
+  Switch,
 } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { StarIcon } from "@heroicons/react/20/solid";
+import { useCart } from "../contexts/CartContext";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function ItemModal({ open, setOpen, item }) {
-  const [selectedSize, setSelectedSize] = useState(item.sizes[2]);
+  const [selectedSize, setSelectedSize] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [suggestPrice, setSuggestPrice] = useState(false);
+  const [suggestedPrice, setSuggestedPrice] = useState("");
+  const [showPriceError, setShowPriceError] = useState(false);
+  const { addToCart } = useCart();
+  
+  // Initialize selectedSize to null when modal opens
+  useEffect(() => {
+    if (open) {
+      // Check if any sizes are in stock
+      const inStockSizes = item.sizes.filter(size => size.inStock);
+      setSelectedSize(inStockSizes.length > 0 ? inStockSizes[0] : null);
+      
+      // Reset price suggestion fields
+      setSuggestPrice(false);
+      setSuggestedPrice("");
+      setShowPriceError(false);
+    }
+  }, [open, item.sizes]);
 
   const incrementQuantity = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
@@ -40,13 +60,42 @@ export default function ItemModal({ open, setOpen, item }) {
     }
   };
 
-  const phoneNumber = "923452102501";
-  const message = `Hello there! I'm interested in your product. I would like to order ${quantity} units of ${item.name} in size ${selectedSize.name}.`; // Replace with your message
-  const handleClick = () => {
-    const encodedMessage = encodeURIComponent(message); // Encode the message
-    const whatsappUrl = `https://wa.me/${phoneNumber}/?text=${encodedMessage}`;
-    window.open(whatsappUrl, "_blank"); // Open WhatsApp in a new tab
+  const handleSuggestedPriceChange = (e) => {
+    const value = e.target.value;
+    // Allow only numbers and decimal points
+    if (/^(\d*\.?\d*)$/.test(value) || value === "") {
+      setSuggestedPrice(value);
+      setShowPriceError(false);
+    }
   };
+
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    if (!selectedSize) return;
+    
+    // Validate suggested price if enabled
+    if (suggestPrice && (!suggestedPrice || parseFloat(suggestedPrice) <= 0)) {
+      setShowPriceError(true);
+      return;
+    }
+    
+    // Use the selected size's price for the cart item
+    const itemWithSelectedPrice = {
+      ...item,
+      price: selectedSize.price || item.price,
+      suggestedPrice: suggestPrice ? parseFloat(suggestedPrice) : null
+    };
+    
+    addToCart(itemWithSelectedPrice, quantity, selectedSize);
+    setOpen(false);
+  };
+
+  // Check if Add to Cart should be disabled
+  const isAddToCartDisabled = !selectedSize || quantity < 1;
+
+  // Calculate total price based on quantity and selected size
+  const currentPrice = selectedSize?.price || item.price;
+
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-10">
       <DialogBackdrop
@@ -90,13 +139,29 @@ export default function ItemModal({ open, setOpen, item }) {
 
                   <section
                     aria-labelledby="information-heading"
-                    className="mt-1"
+                    className="mt-3"
                   >
                     <h3 id="information-heading" className="sr-only">
                       Product information
                     </h3>
 
-                    <p className="font-medium text-gray-900">{item.price}</p>
+                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                      <div className="flex flex-col">
+                        <div className="flex justify-between items-baseline">
+                          <p className="text-2xl font-bold text-gray-900">
+                            Rs. {currentPrice}
+                          </p>
+                          <p className="text-sm text-gray-500">per unit</p>
+                        </div>
+                        {quantity > 1 && (
+                          <p className="text-lg font-medium text-[#c68b2f] mt-1">
+                            Total: Rs. {typeof currentPrice === 'string' 
+                              ? parseFloat(currentPrice.replace(/[^\d.]/g, '')) * quantity 
+                              : currentPrice * quantity}
+                          </p>
+                        )}
+                      </div>
+                    </div>
 
                     {/* Reviews */}
                     <div className="mt-4">
@@ -134,7 +199,7 @@ export default function ItemModal({ open, setOpen, item }) {
                       Product options
                     </h3>
 
-                    <form onSubmit={handleClick}>
+                    <form onSubmit={handleAddToCart}>
                       {/* Size picker */}
                       <fieldset aria-label="Choose a size" className="my-8">
                         <div className="flex items-center justify-between">
@@ -167,6 +232,11 @@ export default function ItemModal({ open, setOpen, item }) {
                             </Radio>
                           ))}
                         </RadioGroup>
+                        {!selectedSize && (
+                          <p className="mt-2 text-sm text-red-500">
+                            Please select a size
+                          </p>
+                        )}
                       </fieldset>
 
                       <div
@@ -192,7 +262,7 @@ export default function ItemModal({ open, setOpen, item }) {
                             <button
                               type="button"
                               className="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-full border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
-                              tabindex="-1"
+                              tabIndex="-1"
                               aria-label="Decrease"
                               data-hs-input-number-decrement=""
                               onClick={decrementQuantity}
@@ -215,7 +285,7 @@ export default function ItemModal({ open, setOpen, item }) {
                             <button
                               type="button"
                               className="size-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-full border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
-                              tabindex="-1"
+                              tabIndex="-1"
                               aria-label="Increase"
                               data-hs-input-number-increment=""
                               onClick={incrementQuantity}
@@ -240,11 +310,60 @@ export default function ItemModal({ open, setOpen, item }) {
                         </div>
                       </div>
 
+                      {/* Suggest price section */}
+                      <div className="mt-6">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium text-gray-900">Suggest your price</span>
+                          <Switch
+                            checked={suggestPrice}
+                            onChange={setSuggestPrice}
+                            className={`${
+                              suggestPrice ? 'bg-[#c68b2f]' : 'bg-gray-200'
+                            } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-[#c68b2f] focus:ring-offset-2`}
+                          >
+                            <span className="sr-only">Suggest your price</span>
+                            <span
+                              className={`${
+                                suggestPrice ? 'translate-x-6' : 'translate-x-1'
+                              } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                            />
+                          </Switch>
+                        </div>
+                        
+                        {suggestPrice && (
+                          <div className="mt-3">
+                            <div className="flex items-center">
+                              <span className="mr-2 text-sm text-gray-700">Rs.</span>
+                              <input
+                                type="text"
+                                value={suggestedPrice}
+                                onChange={handleSuggestedPriceChange}
+                                placeholder="Enter your price"
+                                className="block w-full rounded-md border-gray-300 py-1.5 text-gray-900 shadow-sm focus:border-[#c68b2f] focus:ring-[#c68b2f] sm:text-sm"
+                              />
+                            </div>
+                            {showPriceError && (
+                              <p className="mt-2 text-sm text-red-500">
+                                Please enter a valid price
+                              </p>
+                            )}
+                            <p className="mt-2 text-xs text-gray-500">
+                              Suggested price is subject to seller approval
+                            </p>
+                          </div>
+                        )}
+                      </div>
+
                       <button
                         type="submit"
-                        className="mt-8 flex w-full items-center justify-center rounded-md border border-transparent bg-[#c68b2f] px-8 py-3 text-base font-medium text-white hover:bg-[#c68b2f] focus:outline-none focus:ring-2 focus:ring-[#c68b2f] focus:ring-offset-2"
+                        disabled={isAddToCartDisabled}
+                        className={`mt-8 flex w-full items-center justify-center rounded-md border border-transparent px-8 py-3 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-[#c68b2f] focus:ring-offset-2 ${
+                          isAddToCartDisabled 
+                            ? "bg-gray-400 cursor-not-allowed" 
+                            : "bg-[#c68b2f] hover:bg-[#a67524]"
+                        }`}
                       >
-                        Buy Now
+                        {isAddToCartDisabled ? "Select size to add to cart" : "Add to Cart"}
                       </button>
                     </form>
                   </section>

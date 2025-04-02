@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ShoppingCartIcon, UserIcon } from "@heroicons/react/24/outline";
 import ItemModal from "../components/ItemModal";
+import CartModal from "../components/CartModal";
+import { useCart } from "../contexts/CartContext";
+import SheetDB from "sheetdb-js";
 
 const offers = [
   {
@@ -23,108 +26,7 @@ const offers = [
     href: "#",
   },
 ];
-const trendingProducts = [
-  {
-    id: 1,
-    name: "Multi-Grain Flour",
-    weight: "1 kg",
-    price: "Rs. 100",
-    href: "#",
-    rating: 3.9,
-    imageSrc: "/assets/images/multiGrainFlour.png",
-    imageAlt:
-      "Multi-grain flour in a clear plastic bag with a white label and a black plastic closure.",
-    sizes: [
-      { name: "XXS", inStock: true },
-      { name: "XS", inStock: true },
-      { name: "S", inStock: true },
-      { name: "M", inStock: true },
-      { name: "L", inStock: true },
-      { name: "XL", inStock: true },
-      { name: "XXL", inStock: false },
-    ],
-  },
-  {
-    id: 1,
-    name: "Multi-Grain Flour",
-    weight: "2 kg",
-    price: "Rs. 200",
-    href: "#",
-    rating: 3.9,
-    imageSrc: "/assets/images/multiGrainFlour.png",
-    imageAlt:
-      "Multi-grain flour in a clear plastic bag with a white label and a black plastic closure.",
-    sizes: [
-      { name: "XXS", inStock: true },
-      { name: "XS", inStock: true },
-      { name: "S", inStock: true },
-      { name: "M", inStock: true },
-      { name: "L", inStock: true },
-      { name: "XL", inStock: true },
-      { name: "XXL", inStock: false },
-    ],
-  },
-  {
-    id: 1,
-    name: "Multi-Grain Flour",
-    weight: "5 kg",
-    price: "Rs. 300",
-    href: "#",
-    rating: 3.9,
-    imageSrc: "/assets/images/multiGrainFlour.png",
-    imageAlt:
-      "Multi-grain flour in a clear plastic bag with a white label and a black plastic closure.",
-    sizes: [
-      { name: "XXS", inStock: true },
-      { name: "XS", inStock: true },
-      { name: "S", inStock: true },
-      { name: "M", inStock: true },
-      { name: "L", inStock: true },
-      { name: "XL", inStock: true },
-      { name: "XXL", inStock: false },
-    ],
-  },
-  {
-    id: 1,
-    name: "Multi-Grain Flour",
-    weight: "10 kg",
-    price: "Rs. 400",
-    href: "#",
-    rating: 3.9,
-    imageSrc: "/assets/images/multiGrainFlour.png",
-    imageAlt:
-      "Multi-grain flour in a clear plastic bag with a white label and a black plastic closure.",
-    sizes: [
-      { name: "XXS", inStock: true },
-      { name: "XS", inStock: true },
-      { name: "S", inStock: true },
-      { name: "M", inStock: true },
-      { name: "L", inStock: true },
-      { name: "XL", inStock: true },
-      { name: "XXL", inStock: false },
-    ],
-  },
-  {
-    id: 1,
-    name: "Multi-Grain Flour",
-    weight: "20 kg",
-    price: "Rs. 500",
-    href: "#",
-    rating: 3.9,
-    imageSrc: "/assets/images/multiGrainFlour.png",
-    imageAlt:
-      "Multi-grain flour in a clear plastic bag with a white label and a black plastic closure.",
-    sizes: [
-      { name: "XXS", inStock: true },
-      { name: "XS", inStock: true },
-      { name: "S", inStock: true },
-      { name: "M", inStock: true },
-      { name: "L", inStock: true },
-      { name: "XL", inStock: true },
-      { name: "XXL", inStock: false },
-    ],
-  },
-];
+
 const testimonials = [
   {
     id: 1,
@@ -185,6 +87,30 @@ const footerNavigation = {
 
 export default function Homepage() {
   const [open, setOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [products, setProducts] = useState([]);
+  const { getCartCount } = useCart();
+
+  const handleProductClick = (product) => {
+    setSelectedProduct(product);
+    setOpen(true);
+  };
+
+  useEffect(() => {
+    SheetDB.read('https://sheetdb.io/api/v1/bri2jnuyh42f9', {}).then(function(result){
+      const processedProducts = result.map(product => {
+        return {
+          ...product,
+          sizes: JSON.parse(product.sizes)
+        };
+      });
+      setProducts(processedProducts);
+    }, function(error){
+      console.log(error);
+    });
+  }, []);
+
   return (
     <div className="bg-white">
       <header className="relative z-10">
@@ -242,18 +168,21 @@ export default function Homepage() {
                       />
 
                       <div className="flow-root">
-                        <span className="group -m-2 flex items-center p-2">
+                        <button
+                          className="group -m-2 flex items-center p-2"
+                          onClick={() => setCartOpen(true)}
+                        >
                           <ShoppingCartIcon
                             aria-hidden="true"
                             className="size-6 shrink-0 text-gray-400 group-hover:text-gray-500"
                           />
                           <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                            0
+                            {getCartCount()}
                           </span>
                           <span className="sr-only">
                             items in cart, view bag
                           </span>
-                        </span>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -305,7 +234,14 @@ export default function Homepage() {
                       favorite blends, we grind it fresh for you!
                     </p>
                     <div className="mt-6">
-                      <span className="inline-block rounded-md border border-transparent bg-[#c68b2f] px-8 py-3 font-medium text-white hover:bg-[#a67524] cursor-pointer">
+                      <span 
+                        className="inline-block rounded-md border border-transparent bg-[#c68b2f] px-8 py-3 font-medium text-white hover:bg-[#a67524] cursor-pointer"
+                        onClick={() => {
+                          document.getElementById('trending-heading').scrollIntoView({ 
+                            behavior: 'smooth' 
+                          });
+                        }}
+                      >
                         Order Now
                       </span>
                     </div>
@@ -336,18 +272,18 @@ export default function Homepage() {
                 id="trending-heading"
                 className="text-2xl font-bold tracking-tight text-gray-900"
               >
-                Trending products
+                Explore Our Product Range
               </h2>
             </div>
 
             <div className="relative mt-8">
               <div className="relative w-full overflow-x-auto">
                 <ul className="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-x-8 lg:space-x-0">
-                  {trendingProducts.map((product) => (
+                  {products.map((product) => (
                     <li
                       key={product.id}
-                      className="inline-flex w-64 flex-col text-center mb-6 lg:w-auto"
-                      onClick={() => setOpen(true)}
+                      className="inline-flex w-64 flex-col text-center mb-6 lg:w-auto cursor-pointer"
+                      onClick={() => handleProductClick(product)}
                     >
                       <div className="group relative">
                         <img
@@ -365,17 +301,9 @@ export default function Homepage() {
                               {product.name}
                             </a>
                           </h3>
-                          <p className="mt-1 text-gray-900">{product.price}</p>
+                          <p className="mt-1 text-gray-900">Rs. {product.price}</p>
                         </div>
                       </div>
-                      {open && (
-                        <ItemModal
-                          key={product.id}
-                          open={open}
-                          setOpen={setOpen}
-                          item={product}
-                        />
-                      )}
                     </li>
                   ))}
                 </ul>
@@ -486,6 +414,18 @@ export default function Homepage() {
           </div>
         </div>
       </footer>
+
+      {/* Product Modal */}
+      {open && selectedProduct && (
+        <ItemModal
+          open={open}
+          setOpen={setOpen}
+          item={selectedProduct}
+        />
+      )}
+      
+      {/* Cart Modal */}
+      <CartModal open={cartOpen} setOpen={setCartOpen} />
     </div>
   );
 }
