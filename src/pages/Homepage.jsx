@@ -117,6 +117,9 @@ export default function Homepage() {
   useEffect(() => {
     if (!videoSectionRef.current) return;
 
+    // Store the ref value in a variable inside the effect
+    const currentRef = videoSectionRef.current;
+
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
@@ -129,15 +132,13 @@ export default function Homepage() {
       }
     );
 
-    observer.observe(videoSectionRef.current);
+    observer.observe(currentRef);
 
-    // Clean up
+    // Clean up - use the stored ref value
     return () => {
-      if (videoSectionRef.current) {
-        observer.unobserve(videoSectionRef.current);
-      }
+      observer.unobserve(currentRef);
     };
-  }, [videoSectionRef]);
+  }, []);
 
   // Construct video URL with autoplay parameter based on visibility
   const videoUrl = videoVisible
