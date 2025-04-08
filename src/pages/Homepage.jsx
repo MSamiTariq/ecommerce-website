@@ -90,6 +90,7 @@ export default function Homepage() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [cartOpen, setCartOpen] = useState(false);
   const [products, setProducts] = useState([]);
+  const [youtubeUrl, setYoutubeUrl] = useState();
   const [videoVisible, setVideoVisible] = useState(false);
   const videoSectionRef = useRef(null);
   const { getCartCount } = useCart();
@@ -100,18 +101,30 @@ export default function Homepage() {
   };
 
   useEffect(() => {
-    SheetDB.read('https://sheetdb.io/api/v1/bri2jnuyh42f9', {}).then(function(result){
-      const processedProducts = result.map(product => {
-        return {
-          ...product,
-          sizes: JSON.parse(product.sizes)
-        };
-      });
-      setProducts(processedProducts);
-    }, function(error){
-      console.log(error);
-    });
+    SheetDB.read("https://sheetdb.io/api/v1/bri2jnuyh42f9", {}).then(
+      function (result) {
+        const processedProducts = result.map((product) => {
+          return {
+            ...product,
+            sizes: JSON.parse(product.sizes),
+          };
+        });
+        setProducts(processedProducts);
+      },
+      function (error) {
+        console.log(error);
+      }
+    );
   }, []);
+
+  useEffect(() => {
+    SheetDB.read(
+      "https://sheetdb.io/api/v1/bri2jnuyh42f9?sheet=sheet2",
+      {}
+    ).then(function (result) {
+      setYoutubeUrl(result[0].youtubeUrl);
+    });
+  });
 
   // Set up intersection observer for video section
   useEffect(() => {
@@ -127,7 +140,7 @@ export default function Homepage() {
       },
       {
         root: null, // Use viewport as root
-        rootMargin: '0px',
+        rootMargin: "0px",
         threshold: 0.3, // Trigger when 30% of the element is visible
       }
     );
@@ -142,8 +155,8 @@ export default function Homepage() {
 
   // Construct video URL with autoplay parameter based on visibility
   const videoUrl = videoVisible
-    ? "https://www.youtube.com/embed/bVfyZ5Ew0QQ?si=qya9fcJu5s9znzZj&autoplay=1&mute=1"
-    : "https://www.youtube.com/embed/bVfyZ5Ew0QQ?si=qya9fcJu5s9znzZj";
+    ? `${youtubeUrl}&autoplay=1&mute=1&loop=1&playlist=bVfyZ5Ew0QQ`
+    : `${youtubeUrl}loop=1&playlist=bVfyZ5Ew0QQ`;
 
   return (
     <div className="bg-white">
@@ -249,6 +262,106 @@ export default function Homepage() {
             </div>
           </nav>
 
+          {/* Video Section */}
+          <section
+            ref={videoSectionRef}
+            className="bg-gray-50 py-12 sm:py-16 lg:py-20"
+          >
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="text-center">
+                <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                  Experience Our Quality Products
+                </h2>
+                <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-500">
+                  Discover how our premium products can enhance your everyday
+                  life with natural goodness and exceptional quality.
+                </p>
+              </div>
+
+              <div className="mt-10 flex justify-center">
+                <div className="relative overflow-hidden rounded-xl shadow-2xl max-w-4xl w-full aspect-video">
+                  <iframe
+                    className="absolute inset-0 w-full h-full"
+                    src={videoUrl}
+                    title="YouTube video player"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              </div>
+
+              <div className="mt-12 flex flex-col sm:flex-row justify-center gap-6 sm:gap-12">
+                <div className="flex items-center justify-center">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[#c68b2f] bg-opacity-10">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-6 text-[#c68b2f]"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"
+                      />
+                    </svg>
+                  </span>
+                  <p className="ml-4 text-lg font-medium text-gray-900">
+                    Premium Quality
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-center">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[#c68b2f] bg-opacity-10">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-6 text-[#c68b2f]"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"
+                      />
+                    </svg>
+                  </span>
+                  <p className="ml-4 text-lg font-medium text-gray-900">
+                    Natural Products
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-center">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[#c68b2f] bg-opacity-10">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-6 text-[#c68b2f]"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+                      />
+                    </svg>
+                  </span>
+                  <p className="ml-4 text-lg font-medium text-gray-900">
+                    Made with Love
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
           <div className="relative">
             <div
               aria-hidden="true"
@@ -268,12 +381,14 @@ export default function Homepage() {
                       favorite blends, we grind it fresh for you!
                     </p>
                     <div className="mt-6">
-                      <span 
+                      <span
                         className="inline-block rounded-md border border-transparent bg-[#c68b2f] px-8 py-3 font-medium text-white hover:bg-[#a67524] cursor-pointer"
                         onClick={() => {
-                          document.getElementById('trending-heading').scrollIntoView({ 
-                            behavior: 'smooth' 
-                          });
+                          document
+                            .getElementById("trending-heading")
+                            .scrollIntoView({
+                              behavior: "smooth",
+                            });
                         }}
                       >
                         Order Now
@@ -297,63 +412,6 @@ export default function Homepage() {
             </div>
           </div>
         </div>
-
-        {/* Video Section */}
-        <section ref={videoSectionRef} className="bg-gray-50 py-12 sm:py-16 lg:py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                Experience Our Quality Products
-              </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-500">
-                Discover how our premium products can enhance your everyday life with natural goodness and exceptional quality.
-              </p>
-            </div>
-            
-            <div className="mt-10 flex justify-center">
-              <div className="relative overflow-hidden rounded-xl shadow-2xl max-w-4xl w-full aspect-video">
-                <iframe 
-                  className="absolute inset-0 w-full h-full"
-                  src={videoUrl}
-                  title="YouTube video player" 
-                  frameBorder="0" 
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                  referrerPolicy="strict-origin-when-cross-origin" 
-                  allowFullScreen>
-                </iframe>
-              </div>
-            </div>
-            
-            <div className="mt-12 flex flex-col sm:flex-row justify-center gap-6 sm:gap-12">
-              <div className="flex items-center justify-center">
-                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[#c68b2f] bg-opacity-10">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-[#c68b2f]">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
-                  </svg>
-                </span>
-                <p className="ml-4 text-lg font-medium text-gray-900">Premium Quality</p>
-              </div>
-              
-              <div className="flex items-center justify-center">
-                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[#c68b2f] bg-opacity-10">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-[#c68b2f]">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
-                  </svg>
-                </span>
-                <p className="ml-4 text-lg font-medium text-gray-900">Natural Products</p>
-              </div>
-              
-              <div className="flex items-center justify-center">
-                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[#c68b2f] bg-opacity-10">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-[#c68b2f]">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-                  </svg>
-                </span>
-                <p className="ml-4 text-lg font-medium text-gray-900">Made with Love</p>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* Trending products */}
         <section aria-labelledby="trending-heading" className="bg-white">
@@ -392,7 +450,9 @@ export default function Homepage() {
                               {product.name}
                             </a>
                           </h3>
-                          <p className="mt-1 text-gray-900">Rs. {product.price}</p>
+                          <p className="mt-1 text-gray-900">
+                            Rs. {product.price}
+                          </p>
                         </div>
                       </div>
                     </li>
@@ -508,13 +568,9 @@ export default function Homepage() {
 
       {/* Product Modal */}
       {open && selectedProduct && (
-        <ItemModal
-          open={open}
-          setOpen={setOpen}
-          item={selectedProduct}
-        />
+        <ItemModal open={open} setOpen={setOpen} item={selectedProduct} />
       )}
-      
+
       {/* Cart Modal */}
       <CartModal open={cartOpen} setOpen={setCartOpen} />
     </div>
