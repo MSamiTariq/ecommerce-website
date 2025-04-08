@@ -90,7 +90,8 @@ export default function Homepage() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [cartOpen, setCartOpen] = useState(false);
   const [products, setProducts] = useState([]);
-  const [youtubeUrl, setYoutubeUrl] = useState();
+  const [youtubeUrl, setYoutubeUrl] = useState(null);
+  const [isLoadingVideo, setIsLoadingVideo] = useState(true);
   const [videoVisible, setVideoVisible] = useState(false);
   const videoSectionRef = useRef(null);
   const { getCartCount } = useCart();
@@ -118,13 +119,15 @@ export default function Homepage() {
   }, []);
 
   useEffect(() => {
+    setIsLoadingVideo(true);
     SheetDB.read(
       "https://sheetdb.io/api/v1/bri2jnuyh42f9?sheet=sheet2",
       {}
     ).then(function (result) {
       setYoutubeUrl(result[0].youtubeUrl);
+      setIsLoadingVideo(false);
     });
-  });
+  }, []);
 
   // Set up intersection observer for video section
   useEffect(() => {
@@ -154,9 +157,11 @@ export default function Homepage() {
   }, []);
 
   // Construct video URL with autoplay parameter based on visibility
-  const videoUrl = videoVisible
-    ? `${youtubeUrl}&autoplay=1&mute=1&loop=1&playlist=bVfyZ5Ew0QQ`
-    : `${youtubeUrl}loop=1&playlist=bVfyZ5Ew0QQ`;
+  const videoUrl =
+    youtubeUrl &&
+    (videoVisible
+      ? `${youtubeUrl}&autoplay=1&mute=1&loop=1&playlist=bVfyZ5Ew0QQ`
+      : `${youtubeUrl}loop=1&playlist=bVfyZ5Ew0QQ`);
 
   return (
     <div className="bg-white">
@@ -280,15 +285,44 @@ export default function Homepage() {
 
               <div className="mt-10 flex justify-center">
                 <div className="relative overflow-hidden rounded-xl shadow-2xl max-w-4xl w-full aspect-video">
-                  <iframe
-                    className="absolute inset-0 w-full h-full"
-                    src={videoUrl}
-                    title="YouTube video player"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    allowFullScreen
-                  ></iframe>
+                  {isLoadingVideo ? (
+                    <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
+                      <svg
+                        className="animate-spin h-12 w-12 text-gray-400"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                    </div>
+                  ) : youtubeUrl ? (
+                    <iframe
+                      className="absolute inset-0 w-full h-full"
+                      src={videoUrl}
+                      title="YouTube video player"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      allowFullScreen
+                    ></iframe>
+                  ) : (
+                    <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
+                      <p className="text-gray-500">Video unavailable</p>
+                    </div>
+                  )}
                 </div>
               </div>
 
