@@ -177,28 +177,36 @@ export default function Homepage() {
           </div>
 
           {/* Secondary navigation */}
-          <div className="bg-white">
+          <div className="bg-white fixed top-0 left-0 right-0 z-20 shadow-sm">
             <div className="border-b border-gray-200">
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
                   {/* Logo (lg+) */}
                   <div className="hidden lg:flex lg:items-center">
-                    <span>
+                    <span 
+                      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                      className="cursor-pointer"
+                    >
                       <span className="sr-only">Your Company</span>
                       <img
                         alt=""
-                        src="/assets/images/khalislogo.jpg"
+                        src="/assets/images/khalislogo.png"
                         className="h-16 w-auto"
                       />
                     </span>
                   </div>
 
                   {/* Logo (lg-) */}
-                  <span className="lg:hidden">
+                  <span
+                    onClick={() =>
+                      window.scrollTo({ top: 0, behavior: "smooth" })
+                    }
+                    className="lg:hidden cursor-pointer"
+                  >
                     <span className="sr-only">Your Company</span>
                     <img
                       alt=""
-                      src="/assets/images/khalislogo.jpg"
+                      src="/assets/images/khalislogo.png"
                       className="h-12 w-auto"
                     />
                   </span>
@@ -566,7 +574,7 @@ export default function Homepage() {
               <div className="flex justify-center">
                 <img
                   alt=""
-                  src="/assets/images/khalislogo.jpg"
+                  src="/assets/images/khalislogo.png"
                   className="h-16 w-auto"
                 />
               </div>
